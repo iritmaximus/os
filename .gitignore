@@ -1,0 +1,9 @@
+*.bin
+*.o
+*.d
+*.a
+*.swp
+*.iso
+
+sysroot
+isodir
