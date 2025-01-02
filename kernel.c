@@ -83,15 +83,59 @@ void terminal_putentryat(char c, uint8_t color, size_t x, size_t y)
 	terminal_buffer[index] = vga_entry(c, color);
 }
 
+void terminal_clear_row(size_t row)
+{
+    for (size_t i=0; i<VGA_WIDTH; i++)
+        terminal_putentryat(' ', terminal_color, i, row);
+}
+
+void terminal_scroll(void)
+{
+    // row 0 => Hello 1
+    // row 1 => Hello 2
+    // row 2 => Hello 3 *
+    //
+    // scroll 1
+    //
+    // row 0 => Hello 2
+    // row 1 => Hello 3
+    // row 2 =>         *
+
+
+    for (size_t i=0; i<VGA_HEIGHT; i++)
+    {
+        for (size_t j=0; j<VGA_WIDTH; j++)
+            terminal_buffer[i*VGA_WIDTH + j] = terminal_buffer[(i+1)*VGA_WIDTH + j];
+    }
+
+    terminal_clear_row(VGA_HEIGHT-1);
+}
+
 void terminal_putchar(char c) 
 {
-	terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
-	if (++terminal_column == VGA_WIDTH) {
+    if (c == '\n') {
+        terminal_column = 0;
+        if (++terminal_row == VGA_HEIGHT)
+        {
+            terminal_scroll();
+            terminal_row--;
+        }
+        return;
+    } 
+
+    terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
+
+	if (++terminal_column == VGA_WIDTH) 
+    {
 		terminal_column = 0;
-		if (++terminal_row == VGA_HEIGHT)
-			terminal_row = 0;
+        if (++terminal_row == VGA_HEIGHT)
+        {
+            terminal_scroll();
+            terminal_row--;
+        }
 	}
 }
+
 
 void terminal_write(const char* data, size_t size) 
 {
@@ -104,11 +148,22 @@ void terminal_writestring(const char* data)
 	terminal_write(data, strlen(data));
 }
 
+void terminal_test_scroll()
+{
+    for (size_t i=0; i<126-65; i++)
+    {
+        terminal_putchar(i+65);
+        terminal_writestring("  more chars...\n");
+    }
+}
+
 void kernel_main(void) 
 {
 	/* Initialize terminal interface */
 	terminal_initialize();
 
 	/* Newline support is left as an exercise. */
-	terminal_writestring("Hello, kernel World!\n");
+
+    terminal_test_scroll();
+    terminal_writestring("Hello from the kernel :)\n");
 }
