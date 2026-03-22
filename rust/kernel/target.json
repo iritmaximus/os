@@ -19,10 +19,5 @@
   "has-rpath": false,
   "no-default-libraries": true,
   "position-independent-executables": false,
-  "pre-link-args": {
-    "ld.lld": [
-      "--script=./linker.ld"
-    ]
-  },
   "rustc-abi": "x86-softfloat"
 }
