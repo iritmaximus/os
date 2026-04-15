@@ -1,0 +1,22 @@
+[
+  {
+    "file": "arch/i386/tty.c",
+    "arguments": [
+      "i686-elf-gcc",
+      "-MD",
+      "-c",
+      "arch/i386/tty.c",
+      "-std=gnu99",
+      "-o",
+      "arch/i386/tty.o",
+      "-ffreestanding",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Iinclude",
+      "-Iarch/i386/include"
+    ],
+    "directory": "/home/martti/git/deros/c/kernel",
+    "output": "arch/i386/tty.o"
+  }
+]

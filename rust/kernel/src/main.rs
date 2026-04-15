@@ -1,6 +1,8 @@
 #![no_std]
 #![no_main]
 
+mod vga_buffer;
+
 static HELLO: &[u8] = b"Hello World!";
 
 #[unsafe(no_mangle)]
@@ -12,9 +14,9 @@ pub extern "C" fn _start() -> ! {
             *vga_buffer.offset(i as isize * 2 + 1) = 0xb;
         }
     }
-
     loop {}
 }
+
 #[panic_handler]
 fn panic(_info: &core::panic::PanicInfo) -> ! {
     loop {}
